@@ -1,0 +1,30 @@
+Olteanu Iulia, 334CC
+
+    In main, are loc citirea fisierului de intrare si fiecare fisier de procesat este
+adaugat intr-o coada pentru alocarea dinamica a thread-urilor. Se initializeaza elementele
+de sincronizare: bariera pentru a sincroniza cele doua tipuri de thread-uri map si reduce, 
+iar mutexul este folosit pentru a proteja accesarea unor resurse partajate, fisierele de 
+procesat care trebuie extrase din coada de fisiere in functia map. Apoi, se creaza cele doua
+tipuri de thread-uri, m thread-uri map si n thread-uri reduce. Pentru fiecare thread map, are 
+loc verificarea cozii de fisiere, daca coada este goala, atunci se specifica iesirea din zona
+critica, altfel cat timp coada nu este goala se delimiteaza prin mutex regiunea critica si se 
+extrage fisierul curent din coada, urmand ulterior iesirea din regiune. Apoi, are loc procesarea
+fisierului curent, sunt citite numerele din fisier si pentru fiecare valoare se verifica daca este
+putere perfecta pentru fiecare dintre puterile date de r (2, 3, 4, ... r + 1). Numerele care verifica
+cerinta sunt salvate intr-un map de fiecare thread map, urmand a fi combinate in thread-urile reduce.
+Aceste thread-uri numara valorile unice din listele agregate si scriu rezultatul corespunzator in
+fisierul de output adecvat. Bariera este utila pentru ca thread-urile map si reduce sa fie
+sincronizate, pentru ca toate operatiile map trebuie incheiate inainte de inceperea celor de tip
+reduce. Pentru a verifica daca exista o baza care verifica relatia : baza ^ exponent = numar 
+se foloseste cautarea binara clasica, se calculeaza cele doua capete stanga si dreapta si mijlocul
+intervalului, apoi baza si se verifica cum este fata de numar initial. Daca se gaseste o baza se
+returneaza 1, in caz contrar 0 (functia find_power).
+    Exista doua structuri : una pentru thread-urile map in care pastrez coada de fisiere ce urmeaza 
+a fi prelucrate, numarul de reduceri, pentru ca fiecare mapper are cate numar_reduceri liste partiale, 
+pentru fiecare exponent incepand de la 2 pana la numar_reduceri + 1, iar structura de date unordered_map 
+este folosita pentru a salva valorile mai mari decat zero care sunt puteri perfecte cu un exponent E. 
+Cealalta structura este pentru thread-urile reduce, unde id-ul reprezinta  exponentul thread-ului curent 
+si este folosit pentru a scrie in fisierul de output rezultatul corespunzator, numarul de mapperi este 
+util pentru ca fiecare thread ia toate listele partiale(in numar de numar_mapperi) pentru exponentul 
+adecvat si agrega, iar structura de date unordered_map este utila pentru combinarea listelor partiale 
+create de thread-urile map.
